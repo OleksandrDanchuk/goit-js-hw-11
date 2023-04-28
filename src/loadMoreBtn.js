@@ -1,10 +1,10 @@
-export class LoadMoreBtn {
+export default class LoadMoreBtn {
   constructor({ selector, isHidden = false }) {
-    this.btn = this.getBtnRef(selector);
+    this.btn = this.getBtnRefs(selector);
     isHidden && this.hide();
   }
 
-  getBtnRef(selector) {
+  getBtnRefs(selector) {
     return document.querySelector(selector);
   }
 

@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-export class ApiPics {
+export default class PicsApi {
   constructor() {
     this.topic = '';
     this.page = 1;
