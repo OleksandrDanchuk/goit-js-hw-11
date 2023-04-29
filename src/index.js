@@ -7,7 +7,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const searchFormRef = document.querySelector('.search-form');
 const galletyRef = document.querySelector('.gallery');
 const btnLoadMoreRef = document.querySelector('.load-more');
-const picsApi = new PicsApi();
+const picsApi = new PicsApi(40);
 const loadMoreButton = new LoadMoreBtn({
   selector: '.load-more',
   isHidden: true,
@@ -45,25 +45,30 @@ async function onSearch(e) {
     Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
     rendermarkup(hits);
     autoScroll(0.35);
-    loadMoreButton.enable();
+
+    if (totalHits < picsApi.getLimit()) {
+      loadMoreButton.hide();
+    } else {
+      loadMoreButton.enable();
+    }
   } catch (error) {
     Notiflix.Notify.failure('Oops something gone wrong..');
     console.log(error);
   }
 }
 async function onLoadMore() {
-  picsApi.page += 1;
+  picsApi.setPage(picsApi.getPage() + 1);
   loadMoreButton.disabled();
   try {
     const { totalHits, hits } = await picsApi.fetchPics();
-    if (100 * picsApi.page > totalHits) {
+    if (picsApi.getLimit() * picsApi.getPage() > totalHits) {
       loadMoreButton.hide();
       Notiflix.Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
-      return;
+    } else {
+      loadMoreButton.enable();
     }
-    loadMoreButton.enable();
     rendermarkup(hits);
     autoScroll(2);
   } catch (error) {

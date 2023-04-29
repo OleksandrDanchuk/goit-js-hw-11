@@ -1,8 +1,9 @@
 import axios from 'axios';
 export default class PicsApi {
-  constructor() {
+  constructor(limit) {
     this.topic = '';
     this.page = 1;
+    this.limit = limit;
   }
 
   async fetchPics() {
@@ -13,7 +14,7 @@ export default class PicsApi {
       params: {
         q: this.topic,
         page: this.page,
-        per_page: 40,
+        per_page: this.limit,
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
@@ -25,5 +26,21 @@ export default class PicsApi {
 
   resetPage() {
     this.page = 1;
+  }
+
+  setPage(page) {
+    this.page = page;
+  }
+
+  getPage() {
+    return this.page;
+  }
+
+  getLimit() {
+    return this.limit;
+  }
+
+  setlimit(limit) {
+    this.limit = limit;
   }
 }
